@@ -1,6 +1,10 @@
 package terlan.view;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalQuery;
 import java.util.HashSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -78,26 +82,61 @@ public interface InputOutput {
 	}
 	default String readStringPredicate(String prompt, String errorPrompt,
 			Predicate<String> predicate) {
-		//TODO
+		//DONE
 		//Entered String must match a given predicate
-		return null;
+		while(true){
+			String str = readString(prompt);
+		    if(predicate.test(str)) {
+		    	return str;
+		    } else {
+		    	writeLine(errorPrompt);
+		    }
+	}
 	}
 	default String readStringOptions(String prompt, String errorPrompt,
 			HashSet<String> options) {
-		//TODO
+		//DONE
 		//Entered String must be one out of a given options
-		return null;
+		while(true) {
+			String str = readString(prompt);
+			if(options.contains(prompt)) {
+				return str;
+			} else {
+				writeLine(errorPrompt);
+			}
+		}
 	}
+
 	default LocalDate readIsoDate(String prompt, String errorPrompt) {
-		//TODO
+		//DONE
 		//Entered String must be a LocalDate in format (yyyy-mm-dd)
-		return null;
-	}
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+		 while (true) {
+		        String str = readString(prompt);
+		        try {
+		            return LocalDate.parse(str, formatter);
+		        } catch (DateTimeParseException e) {
+		            writeLine(errorPrompt);
+		        }
+		    }
+		}
 	default LocalDate readIsoDateRange(String prompt, String errorPrompt, LocalDate from,
 			LocalDate to) {
 		//Entered String must be a LocalDate in format (yyyy-mm-dd) in the (from, to)(after from and before to)
-		return null;
-	}
-	
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+		while(true) {
+			String str = readString(prompt);
+			try {
+				LocalDate date = LocalDate.parse(str,formatter);
+				if(date.isAfter(from) && date.isBefore(to)) {
+					return date;
+			} else {
+				writeLine(errorPrompt + " Дата должна быть после " + from + " и до " + to);
+            }
+			} catch (DateTimeParseException e) {
+				writeLine(errorPrompt + " Формат даты должен быть yyyy-MM-dd");
+	        }
+			}
+		}	
 
 }
