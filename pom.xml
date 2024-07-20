@@ -3,7 +3,6 @@
   <groupId>telran.view</groupId>
   <artifactId>cli-view</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>cli-view</name>
   <properties>
 	  <maven.compiler.source>17</maven.compiler.source>
 	  <maven.compiler.target>17</maven.compiler.target>
